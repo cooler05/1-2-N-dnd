@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 
 interface Area {
   id: number;
-  title: string;
+  label: string;
   searchParam: string;
+  loc: string;
 }
 
 interface AreaTabProps {
@@ -20,10 +21,10 @@ function AreaTab({ area }: AreaTabProps) {
   const router = useRouter();
 
   const searchArea = () => {
-    const searchParams = new URLSearchParams();
-    searchParams.append("area", area.searchParam);
-    const url = `${pathname}?${searchParams.toString()}`;
-    router.push(url);
+    const currentUrl = new URL(location.href);
+    currentUrl.searchParams.set(area.loc, area.searchParam);
+    const newUrl = `${currentUrl.pathname}${currentUrl.search}`;
+    router.push(newUrl);
   };
 
   return (
@@ -32,11 +33,12 @@ function AreaTab({ area }: AreaTabProps) {
       variant="outline"
       className={cn(
         "text-xs hover:bg-gray-800 hover:text-white transition",
-        searchParam.get("area") === area.searchParam && "bg-gray-800 text-white"
+        searchParam.get(area.loc) === area.searchParam &&
+          "bg-gray-800 text-white"
       )}
       onClick={searchArea}
     >
-      {area.title}
+      {area.label}
     </Button>
   );
 }

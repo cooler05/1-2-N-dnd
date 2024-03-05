@@ -53,7 +53,7 @@ function SideBar() {
         return (
           <>
             <Button
-              key={link.id}
+              key={link.href}
               asChild
               variant="ghost"
               className={cn(
@@ -89,7 +89,7 @@ function SideBar() {
               pathname.startsWith(link.href) &&
               link?.items.map((item) => (
                 <Button
-                  key={item.id}
+                  key={item.href}
                   asChild
                   variant="ghost"
                   className={cn(

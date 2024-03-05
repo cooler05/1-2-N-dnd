@@ -1,20 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 html,
 body,
 :root {
-  @apply h-full
+  @apply h-full;
 }
 
-::-webkit-scrollbar {
-  @apply w-[2px]
-}
+/* ::-webkit-scrollbar {
+  @apply w-[1px];
+} */
+/* ::-webkit-scrollbar:horizontal {
+  @apply w-[2px];
+} */
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-500 rounded-md
+  @apply bg-gray-500 rounded-md;
 }
-
 
 @layer base {
   :root {
@@ -62,7 +64,7 @@ body,
     --ring: 216 12.2% 83.9%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
