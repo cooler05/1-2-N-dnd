@@ -1,3 +1,3 @@
 export default function Home() {
-  return <main>hello react!</main>;
+  return <main className="">hello react!</main>;
 }
