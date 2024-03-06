@@ -1,4 +1,5 @@
 import AreaTab from "@/components/resources/AreaTab";
+import KanbanBoard from "@/components/resources/KanbanBoard";
 import React from "react";
 
 const areas = [
@@ -63,19 +64,20 @@ const locations = [
 
 function LocationPage() {
   return (
-    <div className="flex flex-col p-3 gap-2">
-      <div className="flex justify-start items-center gap-3 overflow-x-scroll">
+    <div className="flex flex-col p-3 gap-2 h-full">
+      <div className="flex justify-start items-center gap-3 overflow-x-scroll min-h-[3rem]">
         <h2 className="text-sm min-w-fit">区域:</h2>
         {areas.map((area) => (
           <AreaTab key={area.searchParam} area={area} />
         ))}
       </div>
-      <div className="flex justify-start items-center gap-3 overflow-x-scroll">
+      <div className="flex justify-start items-center gap-3 overflow-x-scroll min-h-[3rem]">
         <h2 className="text-sm min-w-fit">位置:</h2>
         {locations.map((location) => (
           <AreaTab key={location.searchParam} area={location} />
         ))}
       </div>
+      <KanbanBoard />
     </div>
   );
 }
