@@ -1,26 +1,19 @@
-"use client";
 import React from "react";
-import { Button } from "../ui/button";
-import { PlusCircle } from "lucide-react";
 import DevicesContainer from "./DevicesContainer";
+import CreateContainerButton from "./CreateContainerButton";
+import { useContainerStore } from "@/lib/store";
 
 function KanbanBoard() {
-  const createEqupContainer = () => {};
-
+  const containers = useContainerStore((state) => state.containers);
   return (
     <div className="border h-full flex flex-col gap-2">
       <div className="flex justify-start items-center">
-        <Button
-          size="sm"
-          className="gap-2"
-          onClick={() => createEqupContainer()}
-        >
-          <PlusCircle size={16} />
-          添加容器
-        </Button>
+        <CreateContainerButton />
       </div>
       <div className="flex justify-center items-center h-full">
-        <DevicesContainer />
+        {containers.map((container, index) => (
+          <DevicesContainer key={index} container={container} />
+        ))}
       </div>
     </div>
   );

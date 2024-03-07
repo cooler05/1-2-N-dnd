@@ -6,26 +6,26 @@ export type DevicesContainer = {
 };
 
 export type Actions = {
-  addDevice: (device: Ledger) => void;
-  removeDevice: (id: string) => void;
-  updateDevice: (device: Ledger) => void;
+  addContainer: (device: Ledger) => void;
+  removeContainer: (id: string) => void;
+  updateContainer: (device: Ledger) => void;
 };
 
 export const useContainerStore = create<DevicesContainer & Actions>()(
   (set) => ({
     containers: [],
-    addDevice: (device: Ledger) =>
+    addContainer: (container: Ledger) =>
       set((state) => ({
-        containers: [...state.containers, device],
+        containers: [...state.containers, container],
       })),
-    removeDevice: (id: string) =>
+    removeContainer: (id: string) =>
       set((state) => ({
         containers: state.containers.filter((device) => device.id !== id),
       })),
-    updateDevice: (updatedDevice: Ledger) =>
+    updateContainer: (updatedContainer: Ledger) =>
       set((state) => ({
         containers: state.containers.map((device) =>
-          device.id === updatedDevice.id ? updatedDevice : device
+          device.id === updatedContainer.id ? updatedContainer : device
         ),
       })),
   })

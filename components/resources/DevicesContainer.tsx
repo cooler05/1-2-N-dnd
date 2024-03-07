@@ -7,8 +7,8 @@ interface DevicesContainerProps {
 
 function DevicesContainer({ container }: DevicesContainerProps) {
   return (
-    <div className="flex flex-col border rounded-md h-12 max-h-96 w-64 bg-gray-200">
-      DevicesContainer
+    <div className="flex flex-col border rounded-md max-h-96 w-64 bg-gray-200">
+      <h2>{container?.deviceName}</h2>
     </div>
   );
 }

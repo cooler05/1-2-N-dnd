@@ -23,7 +23,7 @@ const links = [
       {
         id: 1,
         label: "设备资源",
-        href: "/resources/location",
+        href: "/resources/ledger",
         icon: Cog,
       },
     ],

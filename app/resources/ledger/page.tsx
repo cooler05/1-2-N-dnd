@@ -62,24 +62,28 @@ const locations = [
   },
 ];
 
-function LocationPage() {
+function LedgerPage() {
   return (
     <div className="flex flex-col p-3 gap-2 h-full">
-      <div className="flex justify-start items-center gap-3 overflow-x-scroll min-h-[3rem]">
+      <div className="flex justify-start items-center gap-3 min-h-[3rem]">
         <h2 className="text-sm min-w-fit">区域:</h2>
-        {areas.map((area) => (
-          <AreaTab key={area.searchParam} area={area} />
-        ))}
+        <div className="flex justify-start items-center gap-3 overflow-x-scroll">
+          {areas.map((area) => (
+            <AreaTab key={area.searchParam} area={area} />
+          ))}
+        </div>
       </div>
-      <div className="flex justify-start items-center gap-3 overflow-x-scroll min-h-[3rem]">
+      <div className="flex justify-start items-center gap-3 min-h-[3rem]">
         <h2 className="text-sm min-w-fit">位置:</h2>
-        {locations.map((location) => (
-          <AreaTab key={location.searchParam} area={location} />
-        ))}
+        <div className="flex justify-start items-center gap-3 overflow-x-scroll">
+          {locations.map((location) => (
+            <AreaTab key={location.searchParam} area={location} />
+          ))}
+        </div>
       </div>
       <KanbanBoard />
     </div>
   );
 }
 
-export default LocationPage;
+export default LedgerPage;
