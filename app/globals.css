@@ -5,11 +5,11 @@
 html,
 body,
 :root {
-  @apply h-full;
+   height: 100%;
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 4px;
 }
 ::-webkit-scrollbar:horizontal {
   height: 4px;

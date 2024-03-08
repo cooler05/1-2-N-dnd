@@ -2,14 +2,15 @@
 import { PlusCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { useContainerStore } from "@/lib/store";
+import { v4 as uuidv4 } from "uuid";
 
-const dummyContainer = {
-  id: "1",
+const generateContainer = () => ({
+  id: uuidv4(),
   affiliatedInstitution: "监控分中心",
   affiliatedRegion: "监控分中心",
   regionalLocation: "机房",
   systemPlatform: "监控系统",
-  deviceName: "机柜",
+  deviceName: `机柜 ${uuidv4()}`.substring(0, 8),
   deviceType: "机柜",
   deviceID: "通信机柜",
   detailedLocation: "机房",
@@ -27,7 +28,7 @@ const dummyContainer = {
   deploymentDate: "2024/2/23",
   quantity: undefined,
   defectLiabilityPeriod: "空",
-};
+});
 
 function CreateContainerButton() {
   const addContainer = useContainerStore((state) => state.addContainer);
@@ -36,7 +37,7 @@ function CreateContainerButton() {
     <Button
       size="sm"
       className="gap-2"
-      onClick={() => addContainer(dummyContainer)}
+      onClick={() => addContainer(generateContainer())}
     >
       <PlusCircle size={16} />
       添加容器

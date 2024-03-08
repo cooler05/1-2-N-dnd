@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { Ledger } from "@/types";
 
-export type DevicesContainer = {
+export type TDevicesContainer = {
   containers: Ledger[];
 };
 
 export type Actions = {
   addContainer: (device: Ledger) => void;
   removeContainer: (id: string) => void;
-  updateContainer: (device: Ledger) => void;
+  updateContainers: (containers: Ledger[]) => void;
 };
 
-export const useContainerStore = create<DevicesContainer & Actions>()(
+export const useContainerStore = create<TDevicesContainer & Actions>()(
   (set) => ({
     containers: [],
     addContainer: (container: Ledger) =>
@@ -22,11 +22,9 @@ export const useContainerStore = create<DevicesContainer & Actions>()(
       set((state) => ({
         containers: state.containers.filter((device) => device.id !== id),
       })),
-    updateContainer: (updatedContainer: Ledger) =>
-      set((state) => ({
-        containers: state.containers.map((device) =>
-          device.id === updatedContainer.id ? updatedContainer : device
-        ),
+    updateContainers: (newContainers: Ledger[]) =>
+      set(() => ({
+        containers: newContainers,
       })),
   })
 );
