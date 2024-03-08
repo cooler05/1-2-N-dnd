@@ -7,6 +7,9 @@ import {
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
@@ -31,10 +34,21 @@ function KanbanBoard() {
     );
     updateContainers(arrayMove(containers, activeIdx, overIdx));
   };
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 3,
+      },
+    })
+  );
 
   return (
     <div className="h-full flex flex-col gap-2 px-3">
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
         <div className="flex justify-start items-center">
           <CreateContainerButton />
         </div>
