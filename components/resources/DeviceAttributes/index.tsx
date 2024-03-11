@@ -3,13 +3,13 @@ import BaseAttributes from "./BaseAttributes";
 
 function DeviceAttributes() {
   return (
-    <Tabs defaultValue="base" className="w-full">
+    <Tabs defaultValue="base" className="w-full h-full overflow-y-auto">
       <TabsList>
         <TabsTrigger value="base">基本信息</TabsTrigger>
         <TabsTrigger value="iot">物联信息</TabsTrigger>
         <TabsTrigger value="keyInfo">关键参数</TabsTrigger>
       </TabsList>
-      <TabsContent value="base">
+      <TabsContent value="base" className="">
         <BaseAttributes />
       </TabsContent>
       <TabsContent value="iot">ito here.</TabsContent>

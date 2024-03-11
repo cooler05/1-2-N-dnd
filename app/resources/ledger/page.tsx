@@ -2,7 +2,7 @@ import AreaTab from "@/components/resources/AreaTab";
 import KanbanBoard from "@/components/resources/KanbanBoard";
 import React from "react";
 
-const areas = [
+export const areas = [
   {
     id: 0,
     label: "沿线",
@@ -47,7 +47,7 @@ const areas = [
   },
 ];
 
-const locations = [
+export const locations = [
   {
     id: 1,
     label: "机房 / 配电室",

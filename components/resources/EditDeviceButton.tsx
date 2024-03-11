@@ -18,7 +18,7 @@ function EditDeviceButton() {
           onClick={() => ({})}
         />
       </DialogTrigger>
-      <DialogContent className="min-w-full md:min-w-[46rem]">
+      <DialogContent className="min-w-full md:min-w-[46rem] h-full flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex w-fit">编辑</DialogTitle>
         </DialogHeader>

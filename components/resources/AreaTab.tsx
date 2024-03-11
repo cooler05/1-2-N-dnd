@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+
 import { Button } from "../ui/button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface Area {
@@ -17,7 +17,6 @@ interface AreaTabProps {
 
 function AreaTab({ area }: AreaTabProps) {
   const searchParam = useSearchParams();
-  const pathname = usePathname();
   const router = useRouter();
 
   const searchArea = () => {

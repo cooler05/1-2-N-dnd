@@ -14,6 +14,8 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
 import { Ledger } from "@/types";
+import { areas, locations } from "@/app/resources/ledger/page";
+import { useSearchParams } from "next/navigation";
 
 function KanbanBoard() {
   const { containers, updateContainers } = useContainerStore((state) => state);
@@ -41,9 +43,22 @@ function KanbanBoard() {
       },
     })
   );
+  const searchParams = useSearchParams();
+  const areaName = areas.filter(
+    (area) => area.searchParam === searchParams.get("area")
+  )[0]?.label;
+  const locationName = locations.filter(
+    (location) => location.searchParam === searchParams.get("location")
+  )[0]?.label;
+  console.log(areaName, locationName);
 
   return (
-    <div className="h-full flex flex-col gap-2 px-3">
+    <div className="relative h-full flex flex-col gap-2 px-3">
+      <h2 className="absolute top-1 left-1/2">
+        {areaName && locationName
+          ? `${areaName}--${locationName}`
+          : "未选定位置"}
+      </h2>
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
