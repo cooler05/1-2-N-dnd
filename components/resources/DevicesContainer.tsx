@@ -1,9 +1,10 @@
 import { useContainerStore } from "@/lib/store";
 import { Ledger } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
-import { FilePenLine, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
+import EditDeviceButton from "./EditDeviceButton";
 
 interface DevicesContainerProps {
   container: Ledger;
@@ -47,11 +48,9 @@ function DevicesContainer({ container }: DevicesContainerProps) {
         )}
       >
         <h2 className="mx-auto text-center py-2">{container.deviceName}</h2>
-        <FilePenLine
-          size={23}
-          className="hidden group-hover:block absolute left-2 transition stroke-gray-500 hover:stroke-white p-1 cursor-pointer"
-          onClick={() => ({})}
-        />
+        <div className="hidden group-hover:block absolute left-2 top-[9px] transition">
+          <EditDeviceButton />
+        </div>
         <Trash2
           size={23}
           className="absolute right-2 transition stroke-gray-500 hover:stroke-white p-1 cursor-pointer"
