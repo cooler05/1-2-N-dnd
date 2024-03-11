@@ -7,8 +7,12 @@ import {
 } from "@/components/ui/dialog";
 import { FilePenLine } from "lucide-react";
 import DeviceAttributes from "./DeviceAttributes";
+import { TDevice } from "@/lib/store";
 
-function EditDeviceButton() {
+interface EditDeviceButtonProps {
+  device: TDevice;
+}
+function EditDeviceButton({ device }: EditDeviceButtonProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>

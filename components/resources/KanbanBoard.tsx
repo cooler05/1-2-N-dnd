@@ -1,7 +1,7 @@
 "use client";
 import DevicesContainer from "./DevicesContainer";
 import CreateContainerButton from "./CreateContainerButton";
-import { useContainerStore } from "@/lib/store";
+import { TContainer, useDeviceStore } from "@/lib/store";
 import {
   DndContext,
   DragEndEvent,
@@ -13,14 +13,15 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { Ledger } from "@/types";
 import { areas, locations } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
 
 function KanbanBoard() {
-  const { containers, updateContainers } = useContainerStore((state) => state);
-  const containerIds = containers.map((container) => container.id);
-  const [activeContainer, setActiveContainer] = useState<Ledger>(containers[0]);
+  const { containers, updateContainers } = useDeviceStore((state) => state);
+  const containerIds = containers.map((container) => container.props.id);
+  const [activeContainer, setActiveContainer] = useState<TContainer>(
+    containers[0]
+  );
   const handleDragStart = (e: DragStartEvent) => {
     setActiveContainer(e.active.data.current?.container);
   };
@@ -29,10 +30,10 @@ function KanbanBoard() {
     if (!over) return;
     if (active.id === over.id) return;
     const activeIdx = containers.findIndex(
-      (container) => container.id === active.id
+      (container) => container.props.id === active.id
     );
     const overIdx = containers.findIndex(
-      (container) => container.id === over.id
+      (container) => container.props.id === over.id
     );
     updateContainers(arrayMove(containers, activeIdx, overIdx));
   };
@@ -54,7 +55,7 @@ function KanbanBoard() {
 
   return (
     <div className="relative h-full flex flex-col gap-2 px-3">
-      <h2 className="absolute top-1 left-1/2">
+      <h2 className="absolute top-1 left-1/2 -translate-x-1/2">
         {areaName && locationName
           ? `${areaName}--${locationName}`
           : "未选定位置"}
@@ -70,7 +71,10 @@ function KanbanBoard() {
         <div className="flex justify-start items-center h-full gap-3 overflow-x-scroll overflow-y-hidden">
           <SortableContext items={containerIds}>
             {containers.map((container) => (
-              <DevicesContainer key={container.id} container={container} />
+              <DevicesContainer
+                key={container.props.id}
+                container={container}
+              />
             ))}
           </SortableContext>
         </div>
