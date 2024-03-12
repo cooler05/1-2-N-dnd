@@ -5,6 +5,7 @@ import { TContainer, TDevice, useDeviceStore } from "@/lib/store";
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -57,6 +58,36 @@ function KanbanBoard() {
       setActiveDevice(undefined);
     }
   };
+  const handleDragOver = (e: DragOverEvent) => {
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    if (active.data.current?.type === "Container") {
+      const activeIdx = containers.findIndex(
+        (container) => container.props.id === active.id
+      );
+      const overIdx = containers.findIndex(
+        (container) => container.props.id === over.id
+      );
+      updateContainers(arrayMove(containers, activeIdx, overIdx));
+    } else {
+      const activeDevice = active.data.current?.device;
+      const overContainerId = over.data.current?.device?.containerId ?? over.id;
+      if (
+        activeDevice &&
+        overContainerId &&
+        activeDevice.containerId !== overContainerId
+      ) {
+        const newDevices = devices.map((device) =>
+          device.props.id === activeDevice.props.id
+            ? { ...device, containerId: overContainerId ?? device.containerId }
+            : device
+        );
+        updateDevices(newDevices);
+      }
+      // updateDevices(arrayMove(devices, activeIdx, overIdx));
+      // setActiveDevice(undefined);
+    }
+  };
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -84,6 +115,7 @@ function KanbanBoard() {
         sensors={sensors}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
       >
         <div className="flex justify-start items-center">
           <CreateContainerButton />
