@@ -35,28 +35,29 @@ function KanbanBoard() {
     }
   };
   const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e;
-    if (!over) return;
-    if (active.id === over.id) return;
-    if (e.active.data.current?.type === "Container") {
-      const activeIdx = containers.findIndex(
-        (container) => container.props.id === active.id
-      );
-      const overIdx = containers.findIndex(
-        (container) => container.props.id === over.id
-      );
-      updateContainers(arrayMove(containers, activeIdx, overIdx));
-      setActiveContainer(undefined);
-    } else {
-      const activeIdx = devices.findIndex(
-        (device) => device.props.id === active.id
-      );
-      const overIdx = devices.findIndex(
-        (device) => device.props.id === over.id
-      );
-      updateDevices(arrayMove(devices, activeIdx, overIdx));
-      setActiveDevice(undefined);
-    }
+    setActiveDevice(undefined);
+    setActiveContainer(undefined);
+    // const { active, over } = e;
+    // if (!over || active.id === over.id) return;
+    // if (e.active.data.current?.type === "Container") {
+    //   const activeIdx = containers.findIndex(
+    //     (container) => container.props.id === active.id
+    //   );
+    //   const overIdx = containers.findIndex(
+    //     (container) => container.props.id === over.id
+    //   );
+    //   updateContainers(arrayMove(containers, activeIdx, overIdx));
+    //
+    // } else {
+    //   const activeIdx = devices.findIndex(
+    //     (device) => device.props.id === active.id
+    //   );
+    //   const overIdx = devices.findIndex(
+    //     (device) => device.props.id === over.id
+    //   );
+    //   updateDevices(arrayMove(devices, activeIdx, overIdx));
+    //
+    // }
   };
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
@@ -84,8 +85,6 @@ function KanbanBoard() {
         );
         updateDevices(newDevices);
       }
-      // updateDevices(arrayMove(devices, activeIdx, overIdx));
-      // setActiveDevice(undefined);
     }
   };
   const sensors = useSensors(
