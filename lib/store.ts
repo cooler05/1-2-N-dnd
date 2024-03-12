@@ -1,16 +1,20 @@
 import { create } from "zustand";
 import { Ledger } from "@/types";
 
-export type TDevice = Ledger;
+export type TDevice = {
+  props: Ledger;
+  containerId: string;
+};
 export type TContainer = {
-  props: TDevice;
+  props: Ledger;
   childIds: string[];
 };
 interface DeviceState {
   devices: TDevice[];
   containers: TContainer[];
   addDevice: (device: TDevice) => void;
-  addDeviceToContainer: (containerId: string, deviceId: string) => void;
+  updateDevices: (devices: TDevice[]) => void;
+  removeDevice: (id: string) => void;
   addContainer: (container: TContainer) => void;
   removeContainer: (id: string) => void;
   updateContainers: (containers: TContainer[]) => void;
@@ -23,18 +27,17 @@ export const useDeviceStore = create<DeviceState>()((set) => ({
     set((state) => ({
       devices: [...state.devices, newDevice],
     })),
-  addDeviceToContainer: (containerId: string, deviceId: string) =>
-    set((state) => {
-      const addedContainer = state.containers.map((container) =>
-        container.props.id === containerId
-          ? { ...container, childIds: [...container.childIds, deviceId] }
-          : container
-      );
-      return { containers: addedContainer };
-    }),
-  addContainer: (container: TContainer) =>
+  updateDevices: (newDevices: TDevice[]) =>
+    set(() => ({
+      devices: newDevices,
+    })),
+  removeDevice: (id: string) =>
     set((state) => ({
-      containers: [...state.containers, container],
+      devices: state.devices.filter((device) => device.props.id !== id),
+    })),
+  addContainer: (newContainer: TContainer) =>
+    set((state) => ({
+      containers: [...state.containers, newContainer],
     })),
   removeContainer: (id: string) =>
     set((state) => ({

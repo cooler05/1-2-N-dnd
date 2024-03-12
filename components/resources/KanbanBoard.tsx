@@ -1,7 +1,7 @@
 "use client";
 import DevicesContainer from "./DevicesContainer";
 import CreateContainerButton from "./CreateContainerButton";
-import { TContainer, useDeviceStore } from "@/lib/store";
+import { TContainer, TDevice, useDeviceStore } from "@/lib/store";
 import {
   DndContext,
   DragEndEvent,
@@ -15,27 +15,47 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
 import { areas, locations } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
+import Device from "./Device";
 
 function KanbanBoard() {
-  const { containers, updateContainers } = useDeviceStore((state) => state);
+  const { devices, containers, updateContainers, updateDevices } =
+    useDeviceStore((state) => state);
   const containerIds = containers.map((container) => container.props.id);
-  const [activeContainer, setActiveContainer] = useState<TContainer>(
-    containers[0]
-  );
+  const [activeContainer, setActiveContainer] = useState<TContainer>();
+  const [activeDevice, setActiveDevice] = useState<TDevice>();
+
   const handleDragStart = (e: DragStartEvent) => {
-    setActiveContainer(e.active.data.current?.container);
+    if (e.active.data.current?.type === "Container") {
+      setActiveDevice(undefined);
+      setActiveContainer(e.active.data.current?.container);
+    } else {
+      setActiveContainer(undefined);
+      setActiveDevice(e.active.data.current?.device);
+    }
   };
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (!over) return;
     if (active.id === over.id) return;
-    const activeIdx = containers.findIndex(
-      (container) => container.props.id === active.id
-    );
-    const overIdx = containers.findIndex(
-      (container) => container.props.id === over.id
-    );
-    updateContainers(arrayMove(containers, activeIdx, overIdx));
+    if (e.active.data.current?.type === "Container") {
+      const activeIdx = containers.findIndex(
+        (container) => container.props.id === active.id
+      );
+      const overIdx = containers.findIndex(
+        (container) => container.props.id === over.id
+      );
+      updateContainers(arrayMove(containers, activeIdx, overIdx));
+      setActiveContainer(undefined);
+    } else {
+      const activeIdx = devices.findIndex(
+        (device) => device.props.id === active.id
+      );
+      const overIdx = devices.findIndex(
+        (device) => device.props.id === over.id
+      );
+      updateDevices(arrayMove(devices, activeIdx, overIdx));
+      setActiveDevice(undefined);
+    }
   };
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -79,7 +99,10 @@ function KanbanBoard() {
           </SortableContext>
         </div>
         <DragOverlay>
-          <DevicesContainer container={activeContainer} />
+          {!!activeContainer && (
+            <DevicesContainer container={activeContainer} />
+          )}
+          {!!activeDevice && <Device device={activeDevice} />}
         </DragOverlay>
       </DndContext>
     </div>

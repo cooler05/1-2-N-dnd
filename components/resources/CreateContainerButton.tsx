@@ -4,14 +4,14 @@ import { Button } from "../ui/button";
 import { useDeviceStore } from "@/lib/store";
 import { v4 as uuidv4 } from "uuid";
 
-const generateContainer = () => ({
+export const generateContianer = () => ({
   props: {
     id: uuidv4(),
     affiliatedInstitution: "监控分中心",
     affiliatedRegion: "监控分中心",
     regionalLocation: "机房",
     systemPlatform: "监控系统",
-    deviceName: `机柜 ${uuidv4()}`.substring(0, 8),
+    deviceName: `容器 ${uuidv4()}`.substring(0, 8),
     deviceType: "机柜",
     deviceID: "通信机柜",
     detailedLocation: "机房",
@@ -40,7 +40,7 @@ function CreateContainerButton() {
     <Button
       size="sm"
       className="gap-2"
-      onClick={() => addContainer(generateContainer())}
+      onClick={() => addContainer(generateContianer())}
     >
       <PlusCircle size={16} />
       添加容器

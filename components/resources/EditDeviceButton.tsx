@@ -7,10 +7,10 @@ import {
 } from "@/components/ui/dialog";
 import { FilePenLine } from "lucide-react";
 import DeviceAttributes from "./DeviceAttributes";
-import { TDevice } from "@/lib/store";
+import { Ledger } from "@/types";
 
 interface EditDeviceButtonProps {
-  device: TDevice;
+  device: Ledger;
 }
 function EditDeviceButton({ device }: EditDeviceButtonProps) {
   return (

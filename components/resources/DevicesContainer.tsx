@@ -1,5 +1,5 @@
 import { TContainer, TDevice, useDeviceStore } from "@/lib/store";
-import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { v4 as uuidv4 } from "uuid";
 import Device from "./Device";
 
-const generateDevice = () => ({
+export const generateDevice = () => ({
   id: uuidv4(),
   affiliatedInstitution: "监控分中心",
   affiliatedRegion: "监控分中心",
@@ -39,7 +39,12 @@ interface DevicesContainerProps {
 }
 
 function DevicesContainer({ container }: DevicesContainerProps) {
-  const removeContainer = useDeviceStore((state) => state.removeContainer);
+  const { devices, addDevice, removeContainer } = useDeviceStore(
+    (state) => state
+  );
+  const devicesIncurrentContainer = devices.filter(
+    (device) => device.containerId === container?.props.id
+  );
   const {
     setNodeRef,
     attributes,
@@ -48,9 +53,9 @@ function DevicesContainer({ container }: DevicesContainerProps) {
     transition,
     isDragging,
   } = useSortable({
-    id: container.props.id,
+    id: container?.props.id,
     data: {
-      type: "container",
+      type: "Container",
       container,
     },
   });
@@ -58,12 +63,12 @@ function DevicesContainer({ container }: DevicesContainerProps) {
     transition,
     transform: CSS.Transform.toString(transform),
   };
-  const { containers, addDevice, addDeviceToContainer } = useDeviceStore(
-    (state) => state
-  );
-  const handleClick = (device: TDevice) => {
-    addDevice(device);
-    addDeviceToContainer(container.props.id, device.id);
+
+  const handleClick = () => {
+    addDevice({
+      props: generateDevice(),
+      containerId: container.props.id,
+    });
   };
 
   return (
@@ -83,27 +88,31 @@ function DevicesContainer({ container }: DevicesContainerProps) {
         )}
       >
         <h2 className="mx-auto text-center py-2">
-          {container.props.deviceName}
+          {container?.props.deviceName}
         </h2>
         <div className="hidden group-hover:block absolute left-2 top-[9px] transition">
-          <EditDeviceButton device={container.props} />
+          <EditDeviceButton device={container?.props} />
         </div>
         <Trash2
           size={23}
           className="absolute right-2 transition stroke-gray-500 hover:stroke-white p-1 cursor-pointer"
-          onClick={() => removeContainer(container.props.id)}
+          onClick={() => removeContainer(container?.props.id)}
         />
       </div>
-      <div className="flex-1 flex flex-col p-1 gap-1 w-full overflow-y-auto">
-        {container.childIds.map((id) => (
-          <Device key={id} id={id} />
-        ))}
+      <div className="flex-1 flex flex-col p-1 gap-1 w-full overflow-x-hidden overflow-y-auto">
+        <SortableContext
+          items={devicesIncurrentContainer.map((device) => device.props.id)}
+        >
+          {devicesIncurrentContainer.map((device) => (
+            <Device key={device.props.id} device={device} />
+          ))}
+        </SortableContext>
       </div>
       <div>
         <Button
           variant="outline"
           className="gap-2 w-full"
-          onClick={() => handleClick(generateDevice())}
+          onClick={handleClick}
         >
           <PlusCircle size={16} />
           添加设备
