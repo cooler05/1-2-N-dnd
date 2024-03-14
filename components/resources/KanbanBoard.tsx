@@ -101,7 +101,6 @@ function KanbanBoard() {
   const locationName = locations.filter(
     (location) => location.searchParam === searchParams.get("location")
   )[0]?.label;
-  console.log(areaName, locationName);
 
   return (
     <div className="relative h-full flex flex-col gap-2 px-3">
