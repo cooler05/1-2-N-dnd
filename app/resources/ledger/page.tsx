@@ -2,7 +2,6 @@ import AreaTab from "@/components/resources/AreaTab";
 import KanbanBoard from "@/components/resources/KanbanBoard";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { readFile } from "xlsx";
 
 export const areas = [
   {
@@ -120,6 +119,12 @@ export const locations = [
     id: 4,
     label: "外场",
     searchParam: "wc",
+    loc: "location",
+  },
+  {
+    id: 5,
+    label: "监控分中心",
+    searchParam: "fzx",
     loc: "location",
   },
 ];

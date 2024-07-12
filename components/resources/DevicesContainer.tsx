@@ -1,4 +1,4 @@
-import { TContainer, TDevice, useDeviceStore } from "@/lib/store";
+import { TContainer, useDeviceStore } from "@/lib/store";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
@@ -7,6 +7,8 @@ import EditDeviceButton from "./EditDeviceButton";
 import { Button } from "../ui/button";
 import { v4 as uuidv4 } from "uuid";
 import Device from "./Device";
+import { DndContext } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 export const generateDevice = () => ({
   id: uuidv4(),
@@ -99,15 +101,17 @@ function DevicesContainer({ container }: DevicesContainerProps) {
           onClick={() => removeContainer(container?.props.id)}
         />
       </div>
-      <div className="flex-1 flex flex-col p-1 gap-1 w-full overflow-x-hidden overflow-y-auto">
-        <SortableContext
-          items={devicesIncurrentContainer.map((device) => device.props.id)}
-        >
-          {devicesIncurrentContainer.map((device) => (
-            <Device key={device.props.id} device={device} />
-          ))}
-        </SortableContext>
-      </div>
+      <DndContext modifiers={[restrictToVerticalAxis]}>
+        <div className="flex-1 flex flex-col p-1 gap-1 w-full overflow-x-hidden overflow-y-auto">
+          <SortableContext
+            items={devicesIncurrentContainer.map((device) => device.props.id)}
+          >
+            {devicesIncurrentContainer.map((device) => (
+              <Device key={device.props.id} device={device} />
+            ))}
+          </SortableContext>
+        </div>
+      </DndContext>
       <div>
         <Button
           variant="outline"

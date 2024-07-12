@@ -13,6 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import { useState } from "react";
 import { areas, locations } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
@@ -37,27 +38,6 @@ function KanbanBoard() {
   const handleDragEnd = (e: DragEndEvent) => {
     setActiveDevice(undefined);
     setActiveContainer(undefined);
-    // const { active, over } = e;
-    // if (!over || active.id === over.id) return;
-    // if (e.active.data.current?.type === "Container") {
-    //   const activeIdx = containers.findIndex(
-    //     (container) => container.props.id === active.id
-    //   );
-    //   const overIdx = containers.findIndex(
-    //     (container) => container.props.id === over.id
-    //   );
-    //   updateContainers(arrayMove(containers, activeIdx, overIdx));
-    //
-    // } else {
-    //   const activeIdx = devices.findIndex(
-    //     (device) => device.props.id === active.id
-    //   );
-    //   const overIdx = devices.findIndex(
-    //     (device) => device.props.id === over.id
-    //   );
-    //   updateDevices(arrayMove(devices, activeIdx, overIdx));
-    //
-    // }
   };
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
@@ -109,15 +89,16 @@ function KanbanBoard() {
           ? `${areaName}--${locationName}`
           : "未选定位置"}
       </h2>
+      <div className="flex justify-start items-center">
+        <CreateContainerButton />
+      </div>
       <DndContext
         sensors={sensors}
+        modifiers={[restrictToHorizontalAxis]}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}
       >
-        <div className="flex justify-start items-center">
-          <CreateContainerButton />
-        </div>
         <div className="flex justify-start items-center h-full gap-3 overflow-x-scroll overflow-y-hidden">
           <SortableContext items={containerIds}>
             {containers.map((container) => (
