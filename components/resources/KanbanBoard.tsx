@@ -13,7 +13,10 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import {
+  restrictToHorizontalAxis,
+  restrictToParentElement,
+} from "@dnd-kit/modifiers";
 import { useState } from "react";
 import { areas, locations } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
@@ -35,13 +38,26 @@ function KanbanBoard() {
       setActiveDevice(e.active.data.current?.device);
     }
   };
+
   const handleDragEnd = (e: DragEndEvent) => {
     setActiveDevice(undefined);
     setActiveContainer(undefined);
   };
+
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
     if (!over || active.id === over.id) return;
+    const isActiveDevice = active.data.current?.type === "Device";
+    const isOverDevice = over.data.current?.type === "Device";
+    if (isActiveDevice && isOverDevice) {
+      const activeIdx = devices.findIndex(
+        (device) => device.props.id === active.id
+      );
+      const overIdx = devices.findIndex(
+        (device) => device.props.id === over.id
+      );
+      return updateDevices(arrayMove(devices, activeIdx, overIdx));
+    }
     if (active.data.current?.type === "Container") {
       const activeIdx = containers.findIndex(
         (container) => container.props.id === active.id
@@ -94,7 +110,6 @@ function KanbanBoard() {
       </div>
       <DndContext
         sensors={sensors}
-        modifiers={[restrictToHorizontalAxis]}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}

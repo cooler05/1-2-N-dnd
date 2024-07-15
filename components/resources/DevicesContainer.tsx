@@ -7,8 +7,7 @@ import EditDeviceButton from "./EditDeviceButton";
 import { Button } from "../ui/button";
 import { v4 as uuidv4 } from "uuid";
 import Device from "./Device";
-import { DndContext } from "@dnd-kit/core";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { useMemo } from "react";
 
 export const generateDevice = () => ({
   id: uuidv4(),
@@ -44,8 +43,12 @@ function DevicesContainer({ container }: DevicesContainerProps) {
   const { devices, addDevice, removeContainer } = useDeviceStore(
     (state) => state
   );
-  const devicesIncurrentContainer = devices.filter(
+  const devicesInCurrentContainer = devices.filter(
     (device) => device.containerId === container?.props.id
+  );
+  const deviceIds = useMemo(
+    () => devicesInCurrentContainer.map((device) => device.props.id),
+    [devicesInCurrentContainer]
   );
   const {
     setNodeRef,
@@ -101,17 +104,14 @@ function DevicesContainer({ container }: DevicesContainerProps) {
           onClick={() => removeContainer(container?.props.id)}
         />
       </div>
-      <DndContext modifiers={[restrictToVerticalAxis]}>
+      <SortableContext items={deviceIds}>
         <div className="flex-1 flex flex-col p-1 gap-1 w-full overflow-x-hidden overflow-y-auto">
-          <SortableContext
-            items={devicesIncurrentContainer.map((device) => device.props.id)}
-          >
-            {devicesIncurrentContainer.map((device) => (
-              <Device key={device.props.id} device={device} />
-            ))}
-          </SortableContext>
+          {devicesInCurrentContainer.map((device) => (
+            <Device key={device.props.id} device={device} />
+          ))}
         </div>
-      </DndContext>
+      </SortableContext>
+
       <div>
         <Button
           variant="outline"

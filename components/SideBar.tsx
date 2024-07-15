@@ -1,5 +1,12 @@
 "use client";
-import { ChevronDown, Cog, Home, ScrollText, Settings } from "lucide-react";
+import {
+  ChevronDown,
+  Cog,
+  Home,
+  ScrollText,
+  Settings,
+  BarChart3,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -21,10 +28,16 @@ const links = [
     icon: ScrollText,
     items: [
       {
-        id: 1,
-        label: "设备资源",
+        id: 2.1,
+        label: "设备资源台账",
         href: "/resources/ledger",
         icon: Cog,
+      },
+      {
+        id: 2.2,
+        label: "设备资源统计",
+        href: "/resources/stat",
+        icon: BarChart3,
       },
     ],
   },
