@@ -13,10 +13,6 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import {
-  restrictToHorizontalAxis,
-  restrictToParentElement,
-} from "@dnd-kit/modifiers";
 import { useState } from "react";
 import { areas, locations } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
@@ -42,6 +38,22 @@ function KanbanBoard() {
   const handleDragEnd = (e: DragEndEvent) => {
     setActiveDevice(undefined);
     setActiveContainer(undefined);
+    const { active, over } = e;
+    if (!over) return;
+    if (active.id === over.id) return;
+    const isActiveContainer = active.data.current?.type === "Container";
+    const isOverContainer = over.data.current?.type === "Container";
+    if (isActiveContainer && isOverContainer) {
+      const activeContainerIdx = containers.findIndex(
+        (container) => container.props.id === active.id
+      );
+      const overContainerIdx = containers.findIndex(
+        (container) => container.props.id === over.id
+      );
+      updateContainers(
+        arrayMove(containers, activeContainerIdx, overContainerIdx)
+      );
+    }
   };
 
   const handleDragOver = (e: DragOverEvent) => {
@@ -49,6 +61,8 @@ function KanbanBoard() {
     if (!over || active.id === over.id) return;
     const isActiveDevice = active.data.current?.type === "Device";
     const isOverDevice = over.data.current?.type === "Device";
+    const isOverContainer = over.data.current?.type === "Container";
+    if (!isActiveDevice) return;
     if (isActiveDevice && isOverDevice) {
       const activeIdx = devices.findIndex(
         (device) => device.props.id === active.id
@@ -56,32 +70,36 @@ function KanbanBoard() {
       const overIdx = devices.findIndex(
         (device) => device.props.id === over.id
       );
-      return updateDevices(arrayMove(devices, activeIdx, overIdx));
+      devices[activeIdx].containerId = devices[overIdx].containerId;
+      updateDevices(arrayMove(devices, activeIdx, overIdx));
     }
-    if (active.data.current?.type === "Container") {
-      const activeIdx = containers.findIndex(
-        (container) => container.props.id === active.id
+    if (isActiveDevice && isOverContainer) {
+      const activeIdx = devices.findIndex(
+        (device) => device.props.id === active.id
       );
-      const overIdx = containers.findIndex(
-        (container) => container.props.id === over.id
-      );
-      updateContainers(arrayMove(containers, activeIdx, overIdx));
-    } else {
-      const activeDevice = active.data.current?.device;
-      const overContainerId = over.data.current?.device?.containerId ?? over.id;
-      if (
-        activeDevice &&
-        overContainerId &&
-        activeDevice.containerId !== overContainerId
-      ) {
-        const newDevices = devices.map((device) =>
-          device.props.id === activeDevice.props.id
-            ? { ...device, containerId: overContainerId ?? device.containerId }
-            : device
-        );
-        updateDevices(newDevices);
-      }
+      // const overIdx = containers.findIndex(
+      //   (container) => container.props.id === over.id
+      // );
+      devices[activeIdx].containerId = over.id as string;
+
+      updateDevices(arrayMove(devices, activeIdx, activeIdx));
     }
+    // } else {
+    //   const activeDevice = active.data.current?.device;
+    //   const overContainerId = over.data.current?.device?.containerId ?? over.id;
+    //   if (
+    //     activeDevice &&
+    //     overContainerId &&
+    //     activeDevice.containerId !== overContainerId
+    //   ) {
+    //     const newDevices = devices.map((device) =>
+    //       device.props.id === activeDevice.props.id
+    //         ? { ...device, containerId: overContainerId ?? device.containerId }
+    //         : device
+    //     );
+    //     updateDevices(newDevices);
+    //   }
+    // }
   };
   const sensors = useSensors(
     useSensor(PointerSensor, {
