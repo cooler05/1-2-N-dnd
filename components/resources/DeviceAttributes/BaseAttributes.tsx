@@ -23,22 +23,27 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { Ledger } from "@/types";
+import { useDeviceStore } from "@/lib/store";
 
-function BaseAttributes() {
+interface BaseAttributesProps {
+  device: Ledger;
+}
+
+function BaseAttributes({ device }: BaseAttributesProps) {
   const iPDevice = useRef<HTMLButtonElement>(null);
   const [isIPDevice, setIsIPDevice] = useState(
     iPDevice.current?.dataset.state === "checked" ? true : false
   );
-  console.log("checked", isIPDevice);
-
   const [date, setDate] = useState<Date>();
+  const changeDeviceName = useDeviceStore((state) => state.changeContainerName);
 
   const handleSwitch = () => {
     setIsIPDevice((prevState) => !prevState);
   };
 
   return (
-    <div className="flex flex-col justify-center gap-5 w-full h-full overflow-y-auto">
+    <div className="flex flex-col justify-center gap-5 w-full h-full overflow-y-auto px-2">
       <div className="flex items-center gap-10">
         <div className="flex flex-1 items-center space-x-2">
           <Label
@@ -222,22 +227,15 @@ function BaseAttributes() {
       </div>
       <div className="flex items-center gap-10">
         <div className="flex flex-1 items-center space-x-2">
-          <Label
-            htmlFor="property-rights"
-            className="min-w-fit before:content-['*'] before:text-red-700"
-          >
+          <Label htmlFor="property-rights" className="min-w-fit">
             设备名称:
           </Label>
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue id="property-rights" placeholder="请选择" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="wjg">未交工</SelectItem>
-              <SelectItem value="yjg">已交工</SelectItem>
-              <SelectItem value="done">已竣工</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            className="w-full"
+            placeholder=""
+            value={device.deviceName}
+            onChange={(e) => changeDeviceName(device.id, e.target.value)}
+          />
         </div>
         <div className="flex flex-1 items-center space-x-2">
           <Label htmlFor="property-rights" className="min-w-fit">

@@ -81,18 +81,20 @@ function DevicesContainer({ container }: DevicesContainerProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "flex flex-col border-2 border-gray-900 rounded-md max-h-96 min-h-96 min-w-64 max-w-64 bg-gray-300 overflow-x-hidden",
+        "flex flex-col border-2 border-gray-900 rounded-md max-h-96 min-h-96 min-w-64 max-w-64 bg-gray-300 overflow-x-hidden ",
         isDragging && "opacity-30"
       )}
     >
       <div
-        {...attributes}
-        {...listeners}
         className={cn(
-          "relative group flex items-center bg-gray-900 text-white cursor-grab"
+          "relative group flex items-center bg-gray-900 text-white"
         )}
       >
-        <h2 className="mx-auto text-center py-2">
+        <h2
+          {...attributes}
+          {...listeners}
+          className="mx-auto text-center py-2 h-10 cursor-grab w-full"
+        >
           {container?.props.deviceName}
         </h2>
         <div className="hidden group-hover:block absolute left-2 top-[9px] transition">

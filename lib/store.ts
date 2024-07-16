@@ -16,6 +16,7 @@ interface DeviceState {
   updateDevices: (devices: TDevice[]) => void;
   removeDevice: (id: string) => void;
   addContainer: (container: TContainer) => void;
+  changeContainerName: (id: string, name: string) => void;
   removeContainer: (id: string) => void;
   updateContainers: (containers: TContainer[]) => void;
 }
@@ -23,29 +24,42 @@ interface DeviceState {
 export const useDeviceStore = create<DeviceState>()((set) => ({
   devices: [],
   containers: [],
-  addDevice: (newDevice: TDevice) =>
+  addDevice: (newDevice) =>
     set((state) => ({
       devices: [...state.devices, newDevice],
     })),
-  updateDevices: (newDevices: TDevice[]) =>
+  updateDevices: (newDevices) =>
     set(() => ({
       devices: newDevices,
     })),
-  removeDevice: (id: string) =>
+  removeDevice: (id) =>
     set((state) => ({
       devices: state.devices.filter((device) => device.props.id !== id),
     })),
-  addContainer: (newContainer: TContainer) =>
+  changeContainerName: (id, name) =>
+    set((state) => {
+      const newContainers = state.containers.map((container) => {
+        if (container.props.id === id) {
+          return {
+            ...container,
+            props: { ...container.props, deviceName: name },
+          };
+        }
+        return container;
+      });
+      return { containers: newContainers };
+    }),
+  addContainer: (newContainer) =>
     set((state) => ({
       containers: [...state.containers, newContainer],
     })),
-  removeContainer: (id: string) =>
+  removeContainer: (id) =>
     set((state) => ({
       containers: state.containers.filter(
         (container) => container.props.id !== id
       ),
     })),
-  updateContainers: (newContainers: TContainer[]) =>
+  updateContainers: (newContainers) =>
     set(() => ({
       containers: newContainers,
     })),

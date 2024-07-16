@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { areas, locations } from "@/app/resources/ledger/page";
+import { areas } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
 import Device from "./Device";
 
@@ -77,29 +77,10 @@ function KanbanBoard() {
       const activeIdx = devices.findIndex(
         (device) => device.props.id === active.id
       );
-      // const overIdx = containers.findIndex(
-      //   (container) => container.props.id === over.id
-      // );
       devices[activeIdx].containerId = over.id as string;
 
       updateDevices(arrayMove(devices, activeIdx, activeIdx));
     }
-    // } else {
-    //   const activeDevice = active.data.current?.device;
-    //   const overContainerId = over.data.current?.device?.containerId ?? over.id;
-    //   if (
-    //     activeDevice &&
-    //     overContainerId &&
-    //     activeDevice.containerId !== overContainerId
-    //   ) {
-    //     const newDevices = devices.map((device) =>
-    //       device.props.id === activeDevice.props.id
-    //         ? { ...device, containerId: overContainerId ?? device.containerId }
-    //         : device
-    //     );
-    //     updateDevices(newDevices);
-    //   }
-    // }
   };
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -109,10 +90,11 @@ function KanbanBoard() {
     })
   );
   const searchParams = useSearchParams();
-  const areaName = areas.filter(
+  const area = areas.filter(
     (area) => area.searchParam === searchParams.get("area")
-  )[0]?.label;
-  const locationName = locations.filter(
+  )[0];
+  const areaName = area?.label;
+  const locationName = area?.locations.filter(
     (location) => location.searchParam === searchParams.get("location")
   )[0]?.label;
 

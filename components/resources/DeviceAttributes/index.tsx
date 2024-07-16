@@ -1,7 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BaseAttributes from "./BaseAttributes";
+import { Ledger } from "@/types";
 
-function DeviceAttributes() {
+interface DeviceAttributesProps {
+  device: Ledger;
+}
+
+function DeviceAttributes({ device }: DeviceAttributesProps) {
   return (
     <Tabs defaultValue="base" className="w-full h-full overflow-y-auto">
       <TabsList>
@@ -10,7 +15,7 @@ function DeviceAttributes() {
         <TabsTrigger value="keyInfo">关键参数</TabsTrigger>
       </TabsList>
       <TabsContent value="base" className="">
-        <BaseAttributes />
+        <BaseAttributes device={device} />
       </TabsContent>
       <TabsContent value="iot">ito here.</TabsContent>
       <TabsContent value="keyInfo">key info here.</TabsContent>

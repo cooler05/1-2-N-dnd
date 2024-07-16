@@ -3,13 +3,7 @@
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-
-interface Area {
-  id: number;
-  label: string;
-  searchParam: string;
-  loc: string;
-}
+import { Area } from "@/app/resources/ledger/page";
 
 interface AreaTabProps {
   area: Area;
