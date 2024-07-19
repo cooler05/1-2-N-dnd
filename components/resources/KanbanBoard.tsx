@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { areas } from "@/app/resources/ledger/page";
+import { areas, locations, structures } from "@/app/resources/ledger/page";
 import { useSearchParams } from "next/navigation";
 import Device from "./Device";
 
@@ -94,9 +94,10 @@ function KanbanBoard() {
     (area) => area.searchParam === searchParams.get("area")
   )[0];
   const areaName = area?.label;
-  const locationName = area?.locations.filter(
-    (location) => location.searchParam === searchParams.get("location")
-  )[0]?.label;
+  const location = locations.filter(
+    (loc) => loc.searchParam === searchParams.get("location")
+  )[0];
+  const locationName = location?.label;
 
   return (
     <div className="relative h-full flex flex-col gap-2 px-3">
